@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0.0",
+  "bundle_id": "legacy-main-program-bundle",
+  "program_id": "LEGACY-MAIN-PROGRAM",
+  "slices": [
+    {
+      "slice_id": "program-main-slice-014",
+      "slice_type": "paragraph-cluster",
+      "acceptance_checks": [
+        "compile-generated-java",
+        "verify-balance-rollup-slice-014"
+      ]
+    },
+    {
+      "slice_id": "program-main-slice-015",
+      "slice_type": "sql-interaction-block",
+      "acceptance_checks": [
+        "compile-generated-java",
+        "verify-sql-customer-update"
+      ]
+    }
+  ]
+}

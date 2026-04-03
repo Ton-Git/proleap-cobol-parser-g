@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/verification-feedback-bundle.schema.json",
+  "title": "Verification Feedback Bundle",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "feedback_bundle_id",
+    "target_id",
+    "target_kind",
+    "prior_agent_run_id",
+    "failure_category",
+    "failure_summary",
+    "remediation_objective",
+    "retry_count"
+  ],
+  "properties": {
+    "schema_version": {"type": "string", "minLength": 1},
+    "feedback_bundle_id": {"type": "string", "minLength": 1},
+    "target_id": {"type": "string", "minLength": 1},
+    "target_kind": {"type": "string", "enum": ["slice", "program"]},
+    "prior_agent_run_id": {"type": "string", "minLength": 1},
+    "failure_category": {
+      "type": "string",
+      "enum": [
+        "compile_error",
+        "policy_violation",
+        "static_analysis_failure",
+        "test_failure",
+        "golden_master_mismatch",
+        "runtime_gap",
+        "fixture_problem",
+        "environment_problem"
+      ]
+    },
+    "failure_summary": {"type": "string", "minLength": 1},
+    "failing_locations": {"type": "array", "items": {"type": "object"}},
+    "compiler_output": {"type": "string"},
+    "static_analysis_output": {"type": "string"},
+    "failing_tests": {"type": "array", "items": {"type": "object"}},
+    "runtime_traces": {"type": "array", "items": {"type": "object"}},
+    "golden_master_diffs": {"type": "array", "items": {"type": "object"}},
+    "remediation_objective": {"type": "string", "minLength": 1},
+    "retry_count": {"type": "integer", "minimum": 0},
+    "recommended_escalation_target": {
+      "type": "string",
+      "enum": ["parser", "ir", "runtime", "codegen", "verification", "environment", "manual_redesign"]
+    },
+    "notes": {"type": "array", "items": {"type": "string"}}
+  }
+}

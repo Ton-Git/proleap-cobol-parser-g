@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0.0",
+  "task_id": "program-main-slice-014",
+  "task_type": "human-agent-bounded-implementation",
+  "slice_id": "program-main-slice-014",
+  "program_id": "LEGACY-MAIN-PROGRAM",
+  "target_role": "domain_service_component",
+  "purpose": "Implement or remediate only the bounded generated slice.",
+  "allowed_target_files": [
+    "src/main/java/io/proleap/generated/legacymainprogram/CustomerBalanceService.java"
+  ],
+  "allowed_edit_zones": [
+    {
+      "file": "src/main/java/io/proleap/generated/legacymainprogram/CustomerBalanceService.java",
+      "zone_id": "slice-014"
+    }
+  ],
+  "acceptance_checks": [
+    "compile-generated-java",
+    "verify-balance-rollup-slice-014"
+  ],
+  "stop_conditions": [
+    "Stop if runtime API changes are required.",
+    "Stop if edits exceed allowed generated files."
+  ],
+  "retry_budget": 2,
+  "notes": [
+    "Human developer chooses the coding agent.",
+    "Record prompt/model summary in the evidence package."
+  ]
+}

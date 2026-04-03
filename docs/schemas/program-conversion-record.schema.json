@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/program-conversion-record.schema.json",
+  "title": "Program Conversion Record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "program_id",
+    "qualification_batch_id",
+    "target_microservice",
+    "target_role",
+    "controller_version",
+    "slice_ids",
+    "status"
+  ],
+  "properties": {
+    "schema_version": {"type": "string", "minLength": 1},
+    "program_id": {"type": "string", "minLength": 1},
+    "domain_id": {"type": "string"},
+    "qualification_batch_id": {"type": "string", "minLength": 1},
+    "target_microservice": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["service_name"],
+      "properties": {
+        "service_name": {"type": "string", "minLength": 1},
+        "module": {"type": "string"},
+        "package": {"type": "string"}
+      }
+    },
+    "target_role": {
+      "type": "string",
+      "enum": [
+        "domain_service_component",
+        "job_orchestration_component",
+        "api_adapter_component",
+        "data_access_component",
+        "shared_support_component",
+        "manual_remediation_component",
+        "unknown_needs_review"
+      ]
+    },
+    "controller_version": {"type": "string", "minLength": 1},
+    "template_version": {"type": "string"},
+    "runtime_version": {"type": "string"},
+    "ir_bundle_id": {"type": "string"},
+    "slice_ids": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "status": {
+      "type": "string",
+      "enum": [
+        "queued",
+        "preparing",
+        "scaffolded",
+        "ready_for_human_agent",
+        "validating",
+        "accepted",
+        "retry_pending",
+        "escalated",
+        "manual_remediation",
+        "blocked"
+      ]
+    },
+    "agent_runs": {"type": "array", "items": {"type": "object"}},
+    "validation_summary": {"type": "object", "additionalProperties": false, "properties": {
+      "compile_passed": {"type": "boolean"},
+      "static_analysis_passed": {"type": "boolean"},
+      "tests_passed": {"type": "boolean"},
+      "golden_master_passed": {"type": "boolean"}
+    }},
+    "evidence_refs": {"type": "array", "items": {"type": "string"}},
+    "escalations": {"type": "array", "items": {"type": "object"}}
+  }
+}

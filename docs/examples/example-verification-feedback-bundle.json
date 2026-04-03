@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0.0",
+  "feedback_bundle_id": "program-main-slice-014-feedback-1",
+  "target_id": "program-main-slice-014",
+  "target_kind": "slice",
+  "prior_agent_run_id": "program-main-slice-014-agent-run-1",
+  "failure_category": "golden_master_mismatch",
+  "failure_summary": "Generated output did not satisfy deterministic checks.",
+  "remediation_objective": "Fix the slice without changing runtime APIs.",
+  "retry_count": 1,
+  "recommended_escalation_target": "codegen",
+  "failing_checks": [
+    "verify-balance-rollup-slice-014"
+  ]
+}

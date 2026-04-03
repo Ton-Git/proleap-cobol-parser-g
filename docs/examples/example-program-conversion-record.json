@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0.0",
+  "program_id": "LEGACY-MAIN-PROGRAM",
+  "qualification_batch_id": "reference",
+  "target_microservice": {
+    "service_name": "generated-legacy-main-program",
+    "module": "legacy-main-program",
+    "package": "io.proleap.generated.legacymainprogram"
+  },
+  "target_role": "domain_service_component",
+  "controller_version": "0.1.0",
+  "template_version": "0.1.0",
+  "runtime_version": "0.1.0",
+  "ir_bundle_id": "legacy-main-program-bundle",
+  "slice_ids": ["program-main-slice-014", "program-main-slice-015"],
+  "status": "retry_pending",
+  "agent_runs": [
+    {
+      "iteration_id": "program-main-slice-014-iteration-1",
+      "task_id": "program-main-slice-014",
+      "state": "retry_pending",
+      "operator_id": "developer-01",
+      "chosen_agent": "user-selected-agent"
+    }
+  ],
+  "validation_summary": {
+    "compile_passed": false,
+    "static_analysis_passed": true,
+    "tests_passed": false,
+    "golden_master_passed": false
+  },
+  "evidence_refs": [
+    "handoff://packets/program-main-slice-014",
+    "validation://runs/program-main-slice-014-iteration-1"
+  ]
+}
