@@ -43,7 +43,124 @@ The repo already contains an initial engine skeleton in:
 
 The backlog below assumes that skeleton exists and now needs to be productized phase by phase.
 
+## Autonomous full-plan execution readiness
+
+This backlog is now also the execution contract for a single long-running autonomous implementation agent.
+
+Before broad implementation starts, the agent must first eliminate planning ambiguity. In the current plan state, the exact missing pieces for safe one-shot execution are:
+
+- locked v1 defaults where phase docs currently offer multiple technology or packaging options
+- a canonical artifact directory layout and ownership model
+- a repo-local validation matrix that works without optional external infrastructure
+- a critical path that distinguishes mandatory sequencing from safe parallelism
+- explicit stop conditions for unsupported semantics, scope blow-up, and validation failures
+
+The new Phase 00 below exists to close those gaps before the rest of the backlog is executed.
+
+## Execution rules for one autonomous agent
+
+- Treat the full effort as one branch with many internal milestones, not as one giant unvalidated code drop.
+- After each completed issue, run the smallest meaningful validation command for that issue before moving on.
+- After each phase, run the canonical phase validation suite and update docs and schemas to match code.
+- Do not add optional infrastructure early just because the phase plan mentions it.
+- Prefer explicit unsupported markers, gap bundles, and backlog routing over speculative behavior-preserving claims.
+
+## Phase 00 backlog - Autonomous execution lock-in
+
+Outcome: freeze the implementation defaults and execution contract so a single agent can implement the rest of the backlog without inventing architecture mid-flight.
+
+### P0-01: Lock the v1 implementation defaults in the plan set
+- Purpose: remove optionality that would cause one-shot autonomous execution to drift.
+- Primary files:
+  - `plans/README.md`
+  - `docs/architecture/supported-v1-engine-scope.md`
+  - `docs/architecture/module-layout.md`
+- Depends on: none
+- Done when:
+  - the first integrated build is explicitly defined as single-repo, JSON-artifact, file-backed, and local-orchestration first
+  - later-phase optional technologies are clearly marked as post-v1 rather than parallel choices
+  - repo structure expectations are frozen for the first full build
+- Suggested validation:
+  - document review finds no conflicting default implementation choices across plans
+
+### P0-02: Publish the canonical artifact directory and ownership model
+- Purpose: stop later phases from inventing incompatible output locations and ownership rules.
+- Primary files:
+  - `docs/architecture/module-layout.md`
+  - `docs/architecture/agent-task-contracts.md`
+  - `docs/runbooks/whole-program-conversion-workflow.md`
+- Depends on: P0-01
+- Done when:
+  - controller-owned versus human-editable versus generated-persistent artifacts are separated explicitly
+  - the filesystem layout under `target/engine/` is documented for manifests, parse artifacts, IR, slice bundles, generated project state, verification output, and feedback bundles
+  - every major artifact class has one canonical storage location
+- Suggested validation:
+  - all artifact-producing phases reference the same directory and ownership model
+
+### P0-03: Freeze the repo-local validation matrix
+- Purpose: give one autonomous agent a deterministic command set for proving progress without external services.
+- Primary files:
+  - `plans/README.md`
+  - `plans/implementation-backlog.md`
+  - `docs/architecture/quality-gates.md`
+- Depends on: P0-01
+- Done when:
+  - each phase has a canonical local validation command or test suite family
+  - optional infrastructure is not required for the first end-to-end pass
+  - phase completion gates map to concrete validations rather than review-only language
+- Suggested validation:
+  - every backlog issue and every phase gate can point to at least one runnable local validation path
+
+### P0-04: Publish the critical path and safe parallel lanes
+- Purpose: keep a one-shot implementation agent from doing work out of order.
+- Primary files:
+  - `plans/README.md`
+  - `plans/implementation-backlog.md`
+- Depends on: P0-01
+- Done when:
+  - the mandatory sequence from ingestion to verification to qualification is explicit
+  - the few safe parallel lanes are named
+  - do-not-start conditions are listed for IR, runtime, codegen, and verification work
+- Suggested validation:
+  - the backlog dependency graph reads as one critical path with bounded concurrency rather than a broad wishlist
+
+### P0-05: Write the autonomous-agent stop conditions and escalation policy
+- Purpose: prevent a one-shot implementation pass from papering over unsupported semantics or failing tests.
+- Primary files:
+  - `docs/architecture/quality-gates.md`
+  - `docs/runbooks/human-agent-handoff.md`
+  - `docs/runbooks/ai-assisted-conversion-governance.md`
+- Depends on: P0-03, P0-04
+- Done when:
+  - unsupported semantic gaps, validation failures, schema drift, and oversized slices have explicit routing rules
+  - the plan distinguishes “implement now”, “emit gap artifact”, and “stop and escalate”
+  - the same stop conditions are used by backlog work and by the human-plus-agent slice loop
+- Suggested validation:
+  - review shows no phase still assumes silent fallback or unconstrained retries
+
 ---
+
+## Canonical critical path for one-shot execution
+
+For a single autonomous implementation run, the critical path is:
+
+1. Phase 00 lock-in
+2. Phase 01 governance and artifact ownership
+3. Phase 02 whole-program ingestion
+4. Phase 03 semantic index and slice backlog
+5. Phase 04 IR and slice bundle stabilization
+6. Phase 05 runtime contracts and runtime-gap handling
+7. Phase 06 code generation, editable zones, and generated project persistence
+8. Phase 07 verification and remediation evidence
+9. Phase 08 qualification runner and throughput measurement
+10. Phase 09 hardening and operator handoff
+
+Safe parallel lanes after the critical path prerequisites exist:
+
+- documentation and schema examples can advance alongside code inside the same phase
+- parser regression fixtures can grow alongside ingestion hardening in Phase 02
+- runtime conformance suites can expand in parallel with supported runtime primitives in Phase 05
+- verification report schemas and examples can evolve alongside harness implementation in Phase 07
 
 ## Phase 01 backlog - Engine foundation and governance
 
@@ -701,15 +818,20 @@ Outcome: convert the qualified engine into a maintainable product with release r
 
 If you want the fastest path to visible progress, start with this sequence:
 
-1. P1-04 define the AI-agent and human handoff policy
-2. P1-05 define task-contract and handoff-packet ownership docs
-3. P2-04 emit workspace dependency summaries and readiness decisions
-4. P3-05 publish the conversion-slice backlog artifact
-5. P4-04 upgrade slice packaging to emit richer IR slice bundles
-6. P6-02 add explicit editable zones and source maps to generated files
-7. P6-04 expand handoff packet output into a complete slice packet
-8. P7-02 emit structured slice-level verification reports
-9. P7-04 stabilize remediation feedback bundle schemas and examples
-10. P8-02 build a qualification runner for reference-program workflows
+1. P0-01 lock the v1 implementation defaults
+2. P0-02 publish the canonical artifact directory and ownership model
+3. P0-03 freeze the repo-local validation matrix
+4. P0-04 publish the critical path and safe parallel lanes
+5. P0-05 write the autonomous-agent stop conditions and escalation policy
+6. P1-04 define the AI-agent and human handoff policy
+7. P1-05 define task-contract and handoff-packet ownership docs
+8. P2-04 emit workspace dependency summaries and readiness decisions
+9. P3-05 publish the conversion-slice backlog artifact
+10. P4-04 upgrade slice packaging to emit richer IR slice bundles
+11. P6-02 add explicit editable zones and source maps to generated files
+12. P6-04 expand handoff packet output into a complete slice packet
+13. P7-02 emit structured slice-level verification reports
+14. P7-04 stabilize remediation feedback bundle schemas and examples
+15. P8-02 build a qualification runner for reference-program workflows
 
 That wave would make the deterministic -> human coding-agent -> deterministic loop concrete very quickly.

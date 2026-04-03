@@ -145,6 +145,46 @@ The plans below should converge on a controller that emits and consumes artifact
 
 These artifacts are the contract between deterministic steps and human-driven coding-agent steps.
 
+## What is still missing before one autonomous agent can implement the full plan
+
+The phase documents are directionally correct, but they still leave too many implementation choices open for a single long-running autonomous agent to make safely without inventing architecture along the way.
+
+Before asking one agent to implement the whole plan in one pass, the plan must explicitly lock down:
+
+- default v1 implementation choices where the phase documents currently list options
+- one canonical execution order with a critical path and explicit no-skip gates
+- one repository-local validation matrix that does not assume external infrastructure
+- one artifact storage model and directory convention for all generated evidence
+- one stop-condition and escalation policy for scope growth, unsupported constructs, and failing validations
+- one “first integrated build” target that optimizes for end-to-end determinism before scalability, polish, or modular decomposition
+
+## Locked v1 defaults for the first integrated build
+
+Unless a later backlog item explicitly changes them, the following defaults apply to the first full implementation pass. These defaults override optional alternatives mentioned elsewhere in the phase plans.
+
+- Keep the repo as one Maven module during the first integrated build. Do not split into new top-level `/modules/*` projects until Phase 09 hardening proves the engine behavior is stable.
+- Implement inside the existing `io.proleap.cobol.engine` packages first. Prefer extension of the current skeleton over repo restructuring.
+- Use JSON artifacts only for v1 engine outputs. Do not introduce Parquet, Protobuf, or external artifact stores in the first integrated build.
+- Store all generated engine artifacts under a deterministic filesystem tree rooted in `target/engine/`.
+- Keep semantic indexing in-process and file-backed for v1. Do not require PostgreSQL, graph databases, search services, or dashboards before Phase 08 proves they are necessary.
+- Keep orchestration local and deterministic. Do not add distributed workers, queues, or remote execution control in the first integrated build.
+- Keep testing on Maven plus the current JUnit setup. Do not require a test-platform migration as part of the first end-to-end implementation.
+- Generate conservative runnable Java first, then add the minimum Spring Boot packaging needed to satisfy the one-microservice target late in Phase 06.
+- Limit runtime scope for the first integrated build to semantics needed by the reference corpus and early generated slices. Unsupported semantics must become machine-readable gaps, not speculative implementations.
+- Treat GitHub Actions, observability dashboards, and operator-facing scale features as later hardening work unless they are required to make the local deterministic loop runnable.
+
+## Autonomous full-plan execution mode
+
+If one autonomous agent is asked to implement the full engine plan in one branch, it must follow these rules:
+
+1. Complete the autonomous-execution lock-in work first before broad implementation.
+2. Execute the backlog in dependency order and do not skip a phase completion gate because later code appears easy to scaffold.
+3. Optimize for one working end-to-end reference-program loop before broad feature coverage.
+4. Prefer additive code and stable artifacts over refactors, module splits, or infrastructure additions.
+5. When a construct is unsupported, emit a deterministic gap artifact and route it through the verification and remediation flow instead of guessing behavior.
+6. Keep docs, schemas, examples, and tests aligned with code after each completed backlog item.
+7. Stop only for true blockers: contradictory plan requirements, failing validations that cannot be resolved within the touched scope, or missing reference fixtures required by the current phase.
+
 ## Phase map
 
 1. Phase 01 establishes governance, roles, schemas, and the deterministic-versus-human authority model.

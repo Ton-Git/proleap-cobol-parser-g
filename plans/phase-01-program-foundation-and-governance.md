@@ -6,7 +6,7 @@ Goal: Establish the architecture, engineering controls, target standards, and go
 
 Architecture: This phase defines how the engine is governed before deep implementation begins. It sets the operating model for one large logical COBOL program, one target Spring Boot microservice, bounded conversion slices, deterministic controller authority, and human-operated coding-agent execution.
 
-Tech Stack: Maven multi-module Java repo, GitHub Actions, issue tracker, ADR templates, diagrams, observability conventions, secure artifact storage.
+Tech Stack: single-module Maven Java repo for the first integrated build, issue tracker, ADR templates, diagrams, local file-backed artifact storage under `target/engine/`, GitHub Actions and broader observability only after the local deterministic loop is stable.
 
 ---
 
@@ -35,6 +35,13 @@ Create the non-negotiable rules that make the later deterministic-plus-agent con
 - Runtime implementation
 - Java generation
 - Real customer cutover or rollout execution
+
+## Locked v1 defaults applied in this phase
+
+- keep the repository as one Maven module during the first integrated build
+- keep implementation inside the existing `io.proleap.cobol.engine` packages before any module split
+- treat file-backed artifacts under `target/engine/` as the canonical engine storage model for v1
+- defer CI hardening, dashboards, and operator-scale infrastructure until the local end-to-end loop is proven
 
 ## Concrete engine outputs defined in this phase
 

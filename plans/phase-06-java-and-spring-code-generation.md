@@ -6,7 +6,7 @@ Goal: Build code generators that transform the normalized IR into compilable Jav
 
 Architecture: Code generation is split into two layers: executable Java generation and microservice assembly. The first layer emits behavior-preserving Java against the compatibility runtime. The second layer places generated logic into the single target Spring Boot microservice using well-defined internal module boundaries such as domain services, adapters, controllers, jobs, and support libraries. Human developers may use a coding agent such as Claude Code on top of deterministic scaffolds, but deterministic validation remains authoritative.
 
-Tech Stack: Java code generation library or AST model, formatter/linter integration, Spring Boot, optional internal job orchestration, Maven or Gradle templates, MyBatis or JDBC.
+Tech Stack: Java code generation library or AST model, formatter and linter integration, Spring Boot, Maven build templates for v1, MyBatis or JDBC where required by the supported scope; no Gradle templates, distributed orchestration, or top-level module split in the first integrated build.
 
 ---
 
@@ -26,10 +26,10 @@ Turn validated IR into compilable, runnable, reviewable Java packages aligned to
 
 ## Deliverables
 
-1. `/modules/codegen-java-core`
-2. `/modules/codegen-spring-batch`
-3. `/modules/codegen-spring-boot`
-4. `/modules/sample-migrations`
+1. `/src/main/java/io/proleap/cobol/engine/codegen/`
+2. `/src/main/java/io/proleap/cobol/engine/orchestration/`
+3. `/src/main/java/io/proleap/cobol/engine/agent/`
+4. `/src/test/java/io/proleap/cobol/engine/`
 5. `/docs/architecture/generation-strategy.md`
 6. `/docs/architecture/agent-assisted-codegen-policy.md`
 7. `/docs/architecture/agent-driven-conversion-workflow.md`
@@ -78,7 +78,7 @@ Tasks:
 Objective: Place generated code into one coherent application shape.
 
 Tasks:
-1. Define the generated module and package layout for the single microservice.
+1. Define the generated package and artifact layout for the single microservice without introducing new top-level build modules in v1.
 2. Separate internal roles such as domain services, adapters, data access, controllers, jobs, and support libraries.
 3. Generate application bootstrap, configuration, and build files.
 4. Persist the generated project as a stable artifact between slice passes.
@@ -110,3 +110,5 @@ Tasks:
 ## Phase completion gate
 
 Proceed only when a reference logical program can move through multiple alternating deterministic and human-guided coding-agent passes with repeatable generated project artifacts, bounded editable zones, integration checkpoints, and acceptance evidence at every loop iteration.
+
+For the first integrated build, this must work using the current single-module repo plus generated project artifacts under `target/engine/`, before any module decomposition or external orchestration is attempted.

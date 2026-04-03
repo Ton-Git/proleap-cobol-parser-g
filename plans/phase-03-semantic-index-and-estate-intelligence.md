@@ -6,7 +6,7 @@ Goal: Build whole-program semantic intelligence on top of parser outputs so the 
 
 Architecture: Parse artifacts flow into indexers that populate searchable stores and graph structures. The result is a conversion intelligence layer used by planners, converters, and reviewers. It is not yet the IR; it is the queryable foundation that reveals what the entire codebase contains, how its pieces relate, and how the single large logical COBOL program should be decomposed into bounded slices.
 
-Tech Stack: Java indexing services, PostgreSQL plus optional graph database/search index, REST or CLI query APIs, artifact readers from Phase 02.
+Tech Stack: Java indexing services, in-process file-backed indexes and artifact readers from Phase 02, local CLI or library query APIs for v1; PostgreSQL, graph databases, search indexes, and dashboards are post-v1 extensions only.
 
 ---
 
@@ -24,7 +24,7 @@ Produce a reliable whole-program conversion map: what source units exist, how th
 - Complexity and convertibility scoring
 - Slice-readiness scoring for bounded agent execution
 - Whole-program decomposition support
-- Domain dashboards and reports
+- Operator-readable reports and local query outputs
 
 ## Concrete engine outputs targeted in this phase
 
@@ -88,7 +88,7 @@ Objective: Separate automatable work from manual redesign early.
 Tasks:
 1. Define risk signals: dynamic CALLs, ALTER, GO TO density, unsupported EXEC usage, unresolved references, copybook ambiguity, heavy redefines.
 2. Compute a complexity score and an automation viability score per region and per whole program.
-3. Create dashboards ranking high-value regions by automation potential.
+3. Create deterministic reports ranking high-value regions by automation potential.
 4. Add manual-review queues for low-confidence or high-risk regions.
 5. Feed these scores into engine implementation priorities and qualification order.
 6. Add slice-readiness indicators that predict whether a region can enter the alternating deterministic plus human coding-agent loop directly or must first wait for runtime, IR, or parser improvements.
@@ -108,3 +108,5 @@ Tasks:
 ## Phase completion gate
 
 Proceed only when the codebase can be searched, ranked, decomposed, and segmented well enough to drive IR slicing, runtime priorities, codegen sequencing, and human handoff planning for the whole logical program.
+
+For the first integrated build, that gate must be satisfied using repo-local artifacts and queries only, without requiring external databases or dashboard infrastructure.

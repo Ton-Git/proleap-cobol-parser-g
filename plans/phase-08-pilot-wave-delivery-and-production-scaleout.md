@@ -6,7 +6,7 @@ Goal: Validate the full conversion engine on a curated reference corpus, prove e
 
 Architecture: This phase uses the end-to-end engine built in earlier phases: ingestion, indexing, IR, runtime, generation, orchestration, human handoff packets, and verification. Validation adds qualification runs, runbooks, throughput metrics, remediation queues, and repeatability checks so the platform behaves like a usable conversion engine rather than a disconnected prototype.
 
-Tech Stack: Full engine stack from prior phases, plus qualification automation, environment provisioning for reference runs, and operations dashboards.
+Tech Stack: full engine stack from prior phases, plus repo-local qualification automation and reference-run artifact packaging for v1; environment provisioning and operations dashboards are later hardening extensions once the local qualification loop is stable.
 
 ---
 
@@ -26,7 +26,7 @@ Validate the engine on a carefully selected reference corpus, then harden the or
 ## Concrete engine outputs targeted in this phase
 
 - reference-program qualification records
-- throughput and retry dashboards
+- throughput and retry reports derived from stored artifacts
 - per-program execution evidence bundles
 - accepted patterns and common blocker catalog
 - updated slice-sizing and handoff heuristics based on real runs
@@ -61,3 +61,5 @@ Tasks:
 ## Phase completion gate
 
 Proceed only when the engine proves it can repeatedly produce verifiable outputs on the reference corpus and human operators can run the qualification workflow confidently using bounded coding-agent passes.
+
+For the first integrated build, that proof must be reproducible from local qualification commands and persisted artifact reports, without requiring external environments beyond what the reference corpus and test harness already provide.
